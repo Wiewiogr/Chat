@@ -1,5 +1,6 @@
 package pl.wiewiogr.msgService;
 
+import com.google.common.collect.Lists;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -9,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.junit.Test;
-import org.testng.collections.Lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,6 +48,11 @@ public class ConversationTest {
         participants.add(userRepository.findOne(1L));
         participants.add(userRepository.findOne(2L));
         conversation.setParticipants(participants);
+        Message message = new Message();
+        message.setBody("Message body");
+        message.setFrom(userRepository.findOne(1L));
+        message.setTo(userRepository.findOne(2L));
+        conversation.setMessages(Lists.newArrayList(message));
         conversationRepository.save(conversation);
     }
 
