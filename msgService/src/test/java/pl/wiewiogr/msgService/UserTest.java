@@ -10,7 +10,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.*;
 
 @SpringBootTest(classes = MsgServiceApplication.class)
 @RunWith(SpringRunner.class)
