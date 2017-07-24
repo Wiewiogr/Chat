@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Collection;
+import java.util.List;
 
 @Document
 public class Conversation {
@@ -13,31 +14,27 @@ public class Conversation {
     @GeneratedValue
     private String id;
 
-    private Collection<User> participants;
+    private List<String> participantsNames;
 
-    private Collection<Message> messages;
+    private List<Message> messages;
 
     Conversation(){
 
     }
 
-    public Collection<User> getParticipants() {
-        return participants;
+    public List<String> getParticipantsNames() {
+        return participantsNames;
     }
 
-    public void setParticipants(Collection<User> participants) {
-        this.participants = participants;
+    public void setParticipantsNames(List<String> participantsNames) {
+        this.participantsNames = participantsNames;
     }
 
-    public Collection<Message> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(Collection<Message> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
-    }
-
-    public String getId() {
-        return id;
     }
 }

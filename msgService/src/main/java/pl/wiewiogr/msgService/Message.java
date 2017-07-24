@@ -4,25 +4,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Message {
-    private User from;
-    private User to;
+    private String from;
+    private String to;
     private String body;
-
-    public User getFrom() {
-        return from;
-    }
-
-    public void setFrom(User from) {
-        this.from = from;
-    }
-
-    public User getTo() {
-        return to;
-    }
-
-    public void setTo(User to) {
-        this.to = to;
-    }
 
     public String getBody() {
         return body;
@@ -30,5 +14,21 @@ public class Message {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
     }
 }

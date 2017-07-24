@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest(classes = MsgServiceApplication.class)
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
@@ -28,6 +30,7 @@ public class ConversationTest {
 
     String firstUserName = "Tomasz";
     String secondUserName = "Aga";
+    String messageBody = "Message body";
 
     @Before
     public void setUp(){
@@ -42,21 +45,33 @@ public class ConversationTest {
     @After
     public void cleanUp(){
         userRepository.deleteAll();
+        conversationRepository.deleteAll();
     }
 
     @Test
     public void conversationShouldBeCreatedAndSaved(){
-        User user1 = userRepository.findByName(firstUserName);
-        User user2 = userRepository.findByName(secondUserName);
-        List<User> participants = Lists.newArrayList(user1, user2);
+        List<String> participants = Lists.newArrayList(firstUserName, secondUserName);
         Conversation conversation = new Conversation();
-        conversation.setParticipants(participants);
+        conversation.setParticipantsNames(participants);
+
         Message message = new Message();
-        message.setBody("Message body");
-        message.setFrom(user1);
-        message.setTo(user2);
+        message.setBody(messageBody);
+        message.setFrom(firstUserName);
+        message.setTo(secondUserName);
         conversation.setMessages(Lists.newArrayList(message));
         conversationRepository.save(conversation);
+
+        Conversation conversationFromRepo = conversationRepository
+                .findAll()
+                .get(0);
+
+        assertThat(conversationFromRepo.getParticipantsNames())
+                .contains(firstUserName)
+                .contains(secondUserName);
+
+        Message messageFromRepo = conversationFromRepo.getMessages().get(0);
+        assertThat(messageFromRepo.getBody())
+                .isEqualTo(messageBody);
     }
 
 }
