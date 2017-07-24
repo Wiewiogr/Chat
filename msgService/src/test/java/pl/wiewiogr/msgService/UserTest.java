@@ -1,13 +1,12 @@
 package pl.wiewiogr.msgService;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,6 +17,11 @@ public class UserTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Before
+    public void before(){
+        userRepository.deleteAll();
+    }
 
     @Test
     public void shouldFindUsers(){
@@ -30,7 +34,7 @@ public class UserTest {
         userRepository.save(aga);
 
         //when
-        User firstUser = userRepository.findOne(1L);
+        User firstUser = userRepository.findByName("Tomasz");
         Iterable<User> allUsers = userRepository.findAll();
 
         //then

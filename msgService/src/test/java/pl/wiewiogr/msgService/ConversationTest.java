@@ -26,12 +26,15 @@ public class ConversationTest {
     @Autowired
     UserRepository userRepository;
 
+    String firstUserName = "Tomasz";
+    String secondUserName = "Aga";
+
     @Before
     public void setUp(){
         User tom = new User();
-        tom.setName("Tomasz");
+        tom.setName(firstUserName);
         User aga = new User();
-        aga.setName("Aga");
+        aga.setName(secondUserName);
         userRepository.save(tom);
         userRepository.save(aga);
     }
@@ -43,15 +46,15 @@ public class ConversationTest {
 
     @Test
     public void conversationShouldBeCreatedAndSaved(){
+        User user1 = userRepository.findByName(firstUserName);
+        User user2 = userRepository.findByName(secondUserName);
+        List<User> participants = Lists.newArrayList(user1, user2);
         Conversation conversation = new Conversation();
-        List<User> participants = new ArrayList<>();
-        participants.add(userRepository.findOne(1L));
-        participants.add(userRepository.findOne(2L));
         conversation.setParticipants(participants);
         Message message = new Message();
         message.setBody("Message body");
-        message.setFrom(userRepository.findOne(1L));
-        message.setTo(userRepository.findOne(2L));
+        message.setFrom(user1);
+        message.setTo(user2);
         conversation.setMessages(Lists.newArrayList(message));
         conversationRepository.save(conversation);
     }
