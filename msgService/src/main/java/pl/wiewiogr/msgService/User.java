@@ -1,24 +1,28 @@
 package pl.wiewiogr.msgService;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+import javax.persistence.*;
+import java.util.List;
+
+@Document
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
 
     private String name;
+
+    @DBRef
+    private List<Conversation> conversations;
 
     User(){
 
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -34,4 +38,13 @@ public class User {
     public String toString() {
         return "Id:" + id + ", name : " + name;
     }
+
+    public List<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(List<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
 }
