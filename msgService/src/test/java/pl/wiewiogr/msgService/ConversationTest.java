@@ -55,7 +55,6 @@ public class ConversationTest {
         Message message = new Message();
         message.setBody(messageBody);
         message.setFrom(firstUserName);
-        message.setTo(secondUserName);
         conversation.setMessages(Lists.newArrayList(message));
         conversationRepository.save(conversation);
 

@@ -37,4 +37,9 @@ public class Conversation {
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
+
+    public String getId() {
+        return id;
+    }
+
 }
