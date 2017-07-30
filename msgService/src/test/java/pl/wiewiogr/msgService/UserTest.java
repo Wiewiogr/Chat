@@ -1,5 +1,6 @@
 package pl.wiewiogr.msgService;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +19,8 @@ public class UserTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Before
-    public void before(){
+    @After
+    public void cleanUp(){
         userRepository.deleteAll();
     }
 

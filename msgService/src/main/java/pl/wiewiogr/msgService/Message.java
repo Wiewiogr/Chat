@@ -7,6 +7,15 @@ public class Message {
     private String from;
     private String body;
 
+    public Message(String from, String body){
+        this.from = from;
+        this.body = body;
+    }
+
+    public Message(){
+
+    }
+
     public String getBody() {
         return body;
     }

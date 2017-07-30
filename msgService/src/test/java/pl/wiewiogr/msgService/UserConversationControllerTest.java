@@ -1,7 +1,6 @@
 package pl.wiewiogr.msgService;
 
 import com.google.common.collect.Lists;
-import com.mongodb.util.JSON;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,9 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -40,11 +41,8 @@ public class UserConversationControllerTest extends HttpTester {
     @Before
     public void setUp(){
         super.setUp();
-        User tom = new User();
-        tom.setName(firstUserName);
-        User aga = new User();
-        aga.setName(secondUserName);
-
+        User tom = new User(firstUserName);
+        User aga = new User(secondUserName);
 
         List<String> participants = Lists.newArrayList(firstUserName, secondUserName);
         Conversation conversation = new Conversation();
@@ -52,15 +50,13 @@ public class UserConversationControllerTest extends HttpTester {
 
         tom.setConversations(Lists.newArrayList(conversation));
         aga.setConversations(Lists.newArrayList(conversation));
-        Message message = new Message();
-        message.setBody(messageBody);
-        message.setFrom(firstUserName);
+
+        Message message = new Message(firstUserName, messageBody);
         conversation.setMessages(Lists.newArrayList(message));
         conversationRepository.save(conversation);
 
         userRepository.save(tom);
         userRepository.save(aga);
-
     }
 
     @After
@@ -84,14 +80,24 @@ public class UserConversationControllerTest extends HttpTester {
         String conversationId = user.getConversations().get(0).getId();
         String sentMessageBody = "New message";
 
-        Message message = new Message();
-        message.setBody(sentMessageBody);
-        message.setFrom(firstUserName);
+        int numberOfMessagesBeforeSending = conversationRepository
+                .findOne(conversationId)
+                .getMessages()
+                .size();
 
+        Message message = new Message(firstUserName, sentMessageBody);
 
         mockMvc.perform(post("/" + firstUserName + "/conversation/" + conversationId)
-        .content(this.json(message))
-        .contentType(MediaType.APPLICATION_JSON))
+                .content(this.json(message))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        int numberOfMessagesAfterSending = conversationRepository
+                .findOne(conversationId)
+                .getMessages()
+                .size();
+
+        assertThat(numberOfMessagesAfterSending)
+                .isGreaterThan(numberOfMessagesBeforeSending);
     }
 }

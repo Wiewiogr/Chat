@@ -32,10 +32,8 @@ public class ConversationTest {
 
     @Before
     public void setUp(){
-        User tom = new User();
-        tom.setName(firstUserName);
-        User aga = new User();
-        aga.setName(secondUserName);
+        User tom = new User(firstUserName);
+        User aga = new User(secondUserName);
         userRepository.save(tom);
         userRepository.save(aga);
     }
@@ -52,9 +50,7 @@ public class ConversationTest {
         Conversation conversation = new Conversation();
         conversation.setParticipantsNames(participants);
 
-        Message message = new Message();
-        message.setBody(messageBody);
-        message.setFrom(firstUserName);
+        Message message = new Message(firstUserName, messageBody);
         conversation.setMessages(Lists.newArrayList(message));
         conversationRepository.save(conversation);
 

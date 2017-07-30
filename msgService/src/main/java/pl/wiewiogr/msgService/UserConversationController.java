@@ -24,7 +24,6 @@ public class UserConversationController {
 
     @RequestMapping(method = RequestMethod.GET)
     Collection<Conversation> listUserConversation(@PathVariable String userName){
-        System.out.println("listUserConversation for : " + userName);
         Collection<Conversation> conversations = userRepository.findByName(userName).getConversations();
         return conversations;
     }
@@ -32,7 +31,6 @@ public class UserConversationController {
     @RequestMapping(method = RequestMethod.POST, value = "/{conversationId}" )
     ResponseEntity<?> sendMessage(@PathVariable String userName,
                                   @PathVariable String conversationId, @RequestBody Message inputMessage){
-        System.out.println("sendMessage from : " + userName + " message body" + inputMessage.getBody());
         Conversation conversation = conversationRepository
                 .findOne(conversationId);
 
