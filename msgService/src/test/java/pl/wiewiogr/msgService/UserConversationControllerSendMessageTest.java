@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
@@ -20,12 +19,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest(classes = MsgServiceApplication.class)
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
 
-public class UserConversationControllerTest extends HttpTester {
+public class UserConversationControllerSendMessageTest extends HttpTester {
 
     @Autowired
     ConversationRepository conversationRepository;
@@ -51,8 +49,7 @@ public class UserConversationControllerTest extends HttpTester {
         tom.setConversations(Lists.newArrayList(conversation));
         aga.setConversations(Lists.newArrayList(conversation));
 
-        Message message = new Message(firstUserName, messageBody);
-        conversation.setMessages(Lists.newArrayList(message));
+        conversation.setMessages(Lists.newArrayList());
         conversationRepository.save(conversation);
 
         userRepository.save(tom);
@@ -66,16 +63,7 @@ public class UserConversationControllerTest extends HttpTester {
     }
 
     @Test
-    public void listAllUserConversations() throws Exception {
-        User user = userRepository.findByName(firstUserName);
-
-        mockMvc.perform(get("/" + firstUserName + "/conversation"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(contentType));
-    }
-
-    @Test
-    public void sendMessage() throws Exception {
+    public void sendMessageToConversationThatAlreadyExists() throws Exception {
         User user = userRepository.findByName(firstUserName);
         String conversationId = user.getConversations().get(0).getId();
         String sentMessageBody = "New message";
@@ -100,4 +88,5 @@ public class UserConversationControllerTest extends HttpTester {
         assertThat(numberOfMessagesAfterSending)
                 .isGreaterThan(numberOfMessagesBeforeSending);
     }
+
 }
