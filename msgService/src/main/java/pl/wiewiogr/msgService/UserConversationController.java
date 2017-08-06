@@ -29,7 +29,7 @@ public class UserConversationController {
 
     @RequestMapping(method = RequestMethod.GET)
     Collection<Conversation> listUserConversation(@PathVariable String userName){
-        LOG.info("Listing conversations of user : {}");
+        LOG.info("Listing conversations of user : {}", userName);
         User user = getUserOrThrow(userName);
         Collection<Conversation> conversations = user.getConversations();
         if(conversations != null){
@@ -40,6 +40,7 @@ public class UserConversationController {
     }
 
     private User getUserOrThrow(@PathVariable String userName) {
+        LOG.error("User not found : {}", userName);
         User user = userRepository.findByName(userName);
         if(user == null) throw new UserNotFoundException();
         return user;
