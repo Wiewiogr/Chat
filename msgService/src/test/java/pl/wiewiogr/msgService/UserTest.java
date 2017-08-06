@@ -39,7 +39,6 @@ public class UserTest {
         Iterable<User> allUsers = userRepository.findAll();
 
         //then
-
         assertThat(firstUser.getName())
                 .isEqualTo("Tomasz");
 

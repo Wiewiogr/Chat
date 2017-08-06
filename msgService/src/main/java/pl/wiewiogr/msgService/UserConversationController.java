@@ -1,5 +1,7 @@
 package pl.wiewiogr.msgService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,8 @@ import java.util.List;
 @RequestMapping("/{userName}/conversation")
 public class UserConversationController {
 
+    private Logger LOG = LoggerFactory.getLogger(UserConversationController.class);
+
     private final UserRepository userRepository;
 
     private final ConversationRepository conversationRepository;
@@ -25,6 +29,7 @@ public class UserConversationController {
 
     @RequestMapping(method = RequestMethod.GET)
     Collection<Conversation> listUserConversation(@PathVariable String userName){
+        LOG.info("Listing conversations of user : {}");
         User user = getUserOrThrow(userName);
         Collection<Conversation> conversations = user.getConversations();
         if(conversations != null){
@@ -42,11 +47,11 @@ public class UserConversationController {
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> createConversation(@PathVariable String userName, @RequestBody Conversation conversation){
+        LOG.info("Create conversation for user : {}", userName);
         conversationRepository.save(conversation);
         conversation
                 .getParticipantsNames()
                 .forEach(name -> {
-                    System.out.println("create conversation for user : " + name);
                     User user = userRepository.findByName(name);
                     List<Conversation> userConversations = user.getConversations();
                     if(userConversations != null){
@@ -65,6 +70,7 @@ public class UserConversationController {
     @RequestMapping(method = RequestMethod.POST, value = "/{conversationId}" )
     ResponseEntity<?> sendMessage(@PathVariable String userName,
                                   @PathVariable String conversationId, @RequestBody Message inputMessage){
+        LOG.info("Send message from {} to conversation with id {}", userName, conversationId);
         User user = getUserOrThrow(userName);
         Conversation conversation = conversationRepository
                 .findOne(conversationId);
